@@ -108,6 +108,7 @@ public class TestRefresher extends KorgHttpRefresher<UserDetails> {
 }
 
 final var refresher = new TestRefresher(supplier, refreshTimeSeconds, periodicRefresh);
+refresher.start();
 ```
 
 periodicRefresh - can be set to false if only one time fetch is required. 
