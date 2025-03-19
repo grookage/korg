@@ -21,4 +21,6 @@ public interface KorgRefresher<T> {
     T getData();
 
     void refresh();
+
+    void start();
 }

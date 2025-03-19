@@ -35,7 +35,6 @@ public abstract class AbstractKorgRefresher<T> implements KorgRefresher<T> {
                 TimeUnit.SECONDS,
                 periodicRefresh
         );
-        this.dataProvider.start();
     }
 
     @Override
@@ -48,4 +47,7 @@ public abstract class AbstractKorgRefresher<T> implements KorgRefresher<T> {
         dataProvider.update();
     }
 
+    public void start() {
+        this.dataProvider.start();
+    }
 }
