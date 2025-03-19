@@ -31,9 +31,9 @@ Korg is a periodic, time-backed in-memory object refresher. It aims at providing
 
 ### Concepts
 
-**KorgHttpSupplier** - An abstract class. The http backend that you can customize to construct your own supplier, for that you'll just need to supply the relevant http_url and construct the OkHttpRequest
-**KorgHttpRefresher** - The time backed refresher that takes care of periodic refresher. 
-**Marshaller** - The marshaller that you can bind to convert into the required POJO
+- **KorgHttpSupplier** - An abstract class. The http backend that you can customize to construct your own supplier, for that you'll just need to supply the relevant http_url and construct the OkHttpRequest
+- **KorgHttpRefresher** - The time backed refresher that takes care of periodic refresher. 
+- **Marshaller** - The marshaller that you can bind to convert into the required POJO
 
 ## Example
 
