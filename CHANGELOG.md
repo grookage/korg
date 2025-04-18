@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1]
+
+- Null check for dataConsumer added
+
 ## [1.0.0]
 
 - Release version for Korg.

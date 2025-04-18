@@ -111,7 +111,9 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
             if (data != null) {
                 if (Boolean.TRUE.equals(shouldUpdate.apply(dataReference.get(), data))) {
                     dataReference.set(data);
-                    dataConsumer.accept(data);
+                    if (null != dataConsumer) {
+                        dataConsumer.accept(data);
+                    }
                     lastUpdatedTimestamp.set(System.currentTimeMillis());
                     log.info("[LeiaRefresher.update] Successfully Updated data reference for {}..", supplierName);
                 } else {
