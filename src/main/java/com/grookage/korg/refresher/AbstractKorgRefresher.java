@@ -20,6 +20,7 @@ import com.grookage.korg.provider.TimeBasedDataProvider;
 import com.grookage.korg.suppliers.KorgSupplier;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public abstract class AbstractKorgRefresher<T> implements KorgRefresher<T> {
 
@@ -27,13 +28,15 @@ public abstract class AbstractKorgRefresher<T> implements KorgRefresher<T> {
 
     protected AbstractKorgRefresher(final KorgSupplier<T> supplier,
                                     final int dataRefreshInterval,
-                                    final boolean periodicRefresh) {
+                                    final boolean periodicRefresh,
+                                    final Consumer<T> dataConsumer) {
         this.dataProvider = new TimeBasedDataProvider<>(
                 supplier,
                 null,
                 dataRefreshInterval,
                 TimeUnit.SECONDS,
-                periodicRefresh
+                periodicRefresh,
+                dataConsumer
         );
     }
 

@@ -18,10 +18,12 @@ package com.grookage.korg.refresher;
 
 import com.grookage.korg.suppliers.KorgHttpSupplier;
 
+import java.util.function.Consumer;
+
 public class HttpKorgRefresher<T> extends AbstractKorgRefresher<T> {
 
     public HttpKorgRefresher(KorgHttpSupplier<T> supplier, int refreshTimeInSeconds,
-                             boolean periodicRefresh) {
-        super(supplier, refreshTimeInSeconds, periodicRefresh);
+                             boolean periodicRefresh, Consumer<T> dataConsumer) {
+        super(supplier, refreshTimeInSeconds, periodicRefresh, dataConsumer);
     }
 }

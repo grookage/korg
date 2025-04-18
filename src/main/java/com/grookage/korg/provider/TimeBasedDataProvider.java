@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -43,13 +44,14 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
     private final String supplierName;
     private final BiFunction<T, T, Boolean> shouldUpdate;
     private boolean periodicRefresh = true;
+    private Consumer<T> dataConsumer;
 
-    public TimeBasedDataProvider(Supplier<T> dataSupplier, int delay, TimeUnit timeUnit, boolean periodicRefresh) {
-        this(dataSupplier, null, delay, timeUnit, periodicRefresh);
+    public TimeBasedDataProvider(Supplier<T> dataSupplier, int delay, TimeUnit timeUnit, boolean periodicRefresh, Consumer<T> dataConsumer) {
+        this(dataSupplier, null, delay, timeUnit, periodicRefresh, dataConsumer);
     }
 
-    public TimeBasedDataProvider(Supplier<T> dataSupplier, T initialDefaultValue, int delay, TimeUnit timeUnit, boolean periodicRefresh) {
-        this(dataSupplier, initialDefaultValue, delay, timeUnit, (t1, t2) -> true, periodicRefresh);
+    public TimeBasedDataProvider(Supplier<T> dataSupplier, T initialDefaultValue, int delay, TimeUnit timeUnit, boolean periodicRefresh, Consumer<T> dataConsumer) {
+        this(dataSupplier, initialDefaultValue, delay, timeUnit, (t1, t2) -> true, periodicRefresh, dataConsumer);
     }
 
     public TimeBasedDataProvider(Supplier<T> dataSupplier,
@@ -57,7 +59,8 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
                                  int delay,
                                  TimeUnit timeUnit,
                                  BiFunction<T, T, Boolean> shouldUpdate,
-                                 boolean periodicRefresh) {
+                                 boolean periodicRefresh,
+                                 Consumer<T> consumer) {
         this.dataSupplier = dataSupplier;
         this.initialDefaultValue = initialDefaultValue;
         this.delay = delay;
@@ -69,6 +72,7 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
         this.lastUpdatedTimestamp = new AtomicLong(0L);
         this.shouldUpdate = shouldUpdate;
         this.periodicRefresh = periodicRefresh;
+        this.dataConsumer = consumer;
     }
 
     public void start() {
@@ -89,6 +93,10 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
         return data == null ? this.initialDefaultValue : data;
     }
 
+    public Consumer<T> getDataConsumer() {
+        return dataConsumer;
+    }
+
     public long getLastSuccessfullyUpdatedTimestamp() {
         return this.lastUpdatedTimestamp.get();
     }
@@ -103,6 +111,7 @@ public class TimeBasedDataProvider<T> implements DataProvider<T> {
             if (data != null) {
                 if (Boolean.TRUE.equals(shouldUpdate.apply(dataReference.get(), data))) {
                     dataReference.set(data);
+                    dataConsumer.accept(data);
                     lastUpdatedTimestamp.set(System.currentTimeMillis());
                     log.info("[LeiaRefresher.update] Successfully Updated data reference for {}..", supplierName);
                 } else {
