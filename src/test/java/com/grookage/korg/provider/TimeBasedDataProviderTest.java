@@ -16,9 +16,9 @@
 
 package com.grookage.korg.provider;
 
+import com.grookage.korg.consumer.KorgConsumer;
 import com.grookage.korg.exceptions.KorgErrorCode;
 import com.grookage.korg.exceptions.KorgException;
-import com.grookage.korg.provider.TimeBasedDataProvider;
 import com.grookage.korg.stubs.TestDetails;
 import com.grookage.korg.stubs.TestSupplier;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +28,6 @@ import org.mockito.Mockito;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.awaitility.Awaitility.await;
@@ -36,7 +35,7 @@ import static org.awaitility.Awaitility.await;
 
 class TimeBasedDataProviderTest {
 
-    private static final Consumer<TestDetails> NOOP_CONSUMER = testDetails -> {
+    private static final Supplier<KorgConsumer<TestDetails>> NOOP_CONSUMER = () -> testDetails -> {
 
     };
 
@@ -49,7 +48,7 @@ class TimeBasedDataProviderTest {
                 1,
                 TimeUnit.SECONDS,
                 true,
-                testDetails -> markedReference.set(true)
+                () -> testDetails -> markedReference.set(true)
         );
         var testDetails = timeBasedProvider.getData();
         Assertions.assertNull(testDetails);

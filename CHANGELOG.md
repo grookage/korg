@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2]
+
+- Created a concrete KorgConsumer and taking it as a supplier to work with any dependency injection 
+
 ## [1.0.1]
 
 - Null check for dataConsumer added
