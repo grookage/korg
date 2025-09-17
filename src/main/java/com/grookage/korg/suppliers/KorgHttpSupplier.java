@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 @Slf4j
 public abstract class KorgHttpSupplier<T> implements KorgSupplier<T> {
@@ -59,10 +60,21 @@ public abstract class KorgHttpSupplier<T> implements KorgSupplier<T> {
         this.okHttpClient = OkHttpUtils.okHttpClient(httpConfiguration, name);
     }
 
+    @SneakyThrows
+    protected KorgHttpSupplier(
+            KorgHttpConfiguration httpConfiguration,
+            Marshaller<T> marshaller,
+            KorgEndPointProvider endPointProvider,
+            String name
+    ) {
+        this.marshaller = marshaller;
+        this.endpointProvider = endPointProvider;
+        this.okHttpClient = OkHttpUtils.okHttpClient(httpConfiguration, name);
+    }
+
 
     protected HttpUrl endPoint(final String path) {
-        return endpointProvider
-                .endPoint()
+        return endpointProvider.endPoint()
                 .orElseThrow(IllegalArgumentException::new)
                 .url(path);
     }
