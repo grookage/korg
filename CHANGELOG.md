@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3]
+
+- Taking Endpoint Provider as a parameter to the Httpsupplier for clients to pass their own endpoint provider
+
+
 ## [1.0.2]
 
 - Created a concrete KorgConsumer and taking it as a supplier to work with any dependency injection 
